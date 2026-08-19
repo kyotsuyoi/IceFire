@@ -1,8 +1,11 @@
 # Ferramentas:
 
-- Aseprite - Criar/editar Spritesheet onde é possível salvar como PNG, formato ideal para ser usado no MonoGame.  
+- Aseprite - Criar/editar Spritesheet onde é possível salvar como PNG, formato ideal para ser usado no MonoGame. 
+- - https://www.aseprite.org/ 
 - Tiled - Usa os sprites criados no Aseprite para criar Tile Map por camadas e salvar as coordenadas como JSON (sempre usar a opção de incorporar conjunto de tiles no arquivo JSON para não ser necessário buscar informações externas nos arquivos TSX).  
+- - https://www.mapeditor.org/download.html
 - DotTiled - Dependência instalada via NuGet no Visual Studio, este lê o JSON criado no Tiled para renderizar o mapa no MonoGame.  
+- - Download via NuGet
 
 # Uso:
 
