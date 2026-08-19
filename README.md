@@ -19,7 +19,7 @@
 - As magias tem alcance limitado que podem ser amplicados com Powerups espalhados pelo mapa.  
 - As magias elementais devem ter efeitos distintos, como por exemplo, magia de fogo derrota monstro de gelo com 1 golpe.  
 
-![Conceito atual](IceFire/Content/Tiles/MAP01.png)
+![Conceito atual](IceFire/Content/Tiled/MAP01.png)
 
 # Próximos passos:
 
