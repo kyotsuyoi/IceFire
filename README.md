@@ -1,12 +1,12 @@
 # Ferramentas:
 
-- Aseprite - Criar/editar Spritesheet onde é possível salvar como PNG, formato ideal para ser usado no MonoGame. 
+- Aseprite - Criar/editar Spritesheet onde é possível salvar como PNG, formato ideal para ser usado no MonoGame.
 - - https://www.aseprite.org/ 
 
-- Tiled - Usa os sprites criados no Aseprite para criar Tile Map por camadas e salvar as coordenadas como JSON (sempre usar a opção de incorporar conjunto de tiles no arquivo JSON para não ser necessário buscar informações externas nos arquivos TSX).  
-- - https://www.mapeditor.org/download.html
+- Tiled - Usa os sprites criados no Aseprite para criar Tile Map por camadas e salvar as coordenadas como JSON (sempre usar a opção de incorporar conjunto de tiles no arquivo JSON para não ser necessário buscar informações externas nos arquivos TSX).
+- - https://www.mapeditor.org/download.html 
 
-- DotTiled - Dependência instalada via NuGet no Visual Studio, este lê o JSON criado no Tiled para renderizar o mapa no MonoGame.  
+- DotTiled - Dependência instalada via NuGet no Visual Studio, este lê o JSON criado no Tiled para renderizar o mapa no MonoGame.
 - - Download via NuGet
 
 # Uso:
@@ -18,14 +18,14 @@
 
 # Definições do jogo:
 
-- São apenas 4 direções disponíveis para movimentação, assim como no Bomberman.  
+- São apenas 4 direções disponíveis para movimentação, assim como no Bomberman.
 - São 3 elementos magicos: Neutro, Gelo e Fogo.
 - São 2 personagens, uma usa magia de Gelo e a outra de Fogo.
 - Monstros e personagens tem até 3 pontos de vida.
-- As personagens criam magias elementais que são colocadas no chão e detonam após alguns segundos, mesmo estilo de Bomberman.  
+- As personagens criam magias elementais que são colocadas no chão e detonam após alguns segundos, mesmo estilo de Bomberman. 
 - As magias se espalham em esferas de chamas ou gelo para as 4 direções disponíveis e podem ser bloqueadas por blocos indestrutíveis.
 - As magias tem alcance limitado que podem varias de 1~10 blocos, mas dependem de ser amplificadas com PowerUps espalhados pelo mapa.
-- As personagens também tem ataques físicos/neutros 
+- As personagens também tem ataques físicos/neutros.
 - - Ataque físico é sempre Neutro, que não tem dano e efeito de Gelo nem Fogo e só podem ser feito próximo aos monstros/objetos.
 - - O elemento Neutro é usado como magia pelos monstros do tipo Neutro.
 - As personagens tem ataques mágicos especiais direcionados a uma direção, esses ataques só podem ser usados após alguma condição ainda não definida.
