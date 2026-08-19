@@ -14,7 +14,10 @@
 - Os arquivos com as imagens/texturas são inseridos no MonoGame, arquivo Content.mgcb. Ex.: TIL01.png e OBJ01.png. Estes arquivos são carregados no método Game1.LoadContent().  
 - Dentro de LoadContent passamos as texturas para a classe TilemapRenderer, esta classe é responsável por ler as coordenadas do JSON e renderizar as texturas dos arquivos, lá é usada a dependência do DotTiled.  
 - DotTiled serve apenas para ler os tiles/texturas do JSON em uma lista, quem renderiza é o MonoGame com spriteBatch.Draw().  
-- O DotTiled tem classes internas predefinidas como TileLayer e ObjectLayer, essas classes estão no JSON e se referem as camadas de texturas criadas no Tiled, no exemplo a TileLayer recebe as coordenada para o arquivo TIL01 e a ObjectLayer recebe sobre o arquivo de textura OBJ01.  
+- O DotTiled tem classes internas predefinidas como TileLayer e ObjectLayer, essas classes estão no JSON e se referem as camadas de texturas criadas no Tiled, no exemplo a TileLayer recebe as coordenada para o arquivo TIL01 e a ObjectLayer recebe sobre o arquivo de textura OBJ01.
+
+# Conceito atual
+![Conceito atual](IceFire/Content/Tiles/Tiled/MAP01.png)
 
 # Definições do jogo:
 
@@ -30,7 +33,6 @@
 - - O elemento Neutro é usado como magia pelos monstros do tipo Neutro.
 - As personagens tem ataques mágicos especiais direcionados a uma direção, esses ataques só podem ser usados após alguma condição ainda não definida.
 - - A condição de magias especiais pode ser através de itens obtidos pelo mapa ou drop de monstro, algo assim.
-
 - As magias elementais devem ter efeitos distintos, como por exemplo:
 - - Magia de gelo derrota monstro de fogo com 1 golpe (3 de dano).
 - - Magia de gelo congela monstro neutro e o deixa imóvel mas não derrota se não der um golpe físico.
@@ -43,13 +45,10 @@
 - - - Monstro queimando se movimenta mais rápido e pode atacar os jogadores.
 - - - Monstro queimando, se receber golpe físico, pode ser convertido em magia de fogo na direção do golpe e o monstro é derrotado (3 de dano).
 - - Magia de fogo não funciona em monstro de fogo.
-
 - Monstros tem 3 tipos: Neutro (verde), Gelo (azul) e Fogo (vermelho).
 - Monstros de gelo e fogo podem usar magias de gelo e fogo que causam os mesmos efeitos assim como dos jogadores.
 - Monstros de gelo e fogo podem usar ataque físico/neutro.
 - Monstro neutro só causa dano neutro mas podem usar magias do tipo neutro.
-
-![Conceito atual](IceFire/Content/Tiles/Tiled/MAP01.png)
 
 # Etapas:
 
