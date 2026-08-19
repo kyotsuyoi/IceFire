@@ -23,3 +23,8 @@
 /processor:TextureProcessor
 /build:Tiles/Sprites/OBJ01.png
 
+#begin Fonts/MenuFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Fonts/MenuFont.spritefont
+

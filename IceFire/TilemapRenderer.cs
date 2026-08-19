@@ -33,6 +33,8 @@ namespace IceFire
             _tilesets = ((IEnumerable<dynamic>)_map.Tilesets).OrderBy(tileset => (uint)tileset.FirstGID.Value).ToList();
         }
 
+        public Point Size => new((int)_map.Width * (int)_map.TileWidth, (int)_map.Height * (int)_map.TileHeight);
+
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (dynamic layer in _map.Layers)
