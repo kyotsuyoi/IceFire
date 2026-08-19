@@ -1,4 +1,7 @@
-# Ferramentas:
+# Conceito atual
+![Conceito atual](IceFire/Content/Tiles/Tiled/MAP01.png)
+
+# Ferramentas
 
 - Aseprite - Criar/editar Spritesheet onde é possível salvar como PNG, formato ideal para ser usado no MonoGame.
 - - https://www.aseprite.org/ 
@@ -9,17 +12,14 @@
 - DotTiled - Dependência instalada via NuGet no Visual Studio, este lê o JSON criado no Tiled para renderizar o mapa no MonoGame.
 - - Download via NuGet
 
-# Uso:
+# Uso das ferramentas
 
 - Os arquivos com as imagens/texturas são inseridos no MonoGame, arquivo Content.mgcb. Ex.: TIL01.png e OBJ01.png. Estes arquivos são carregados no método Game1.LoadContent().  
 - Dentro de LoadContent passamos as texturas para a classe TilemapRenderer, esta classe é responsável por ler as coordenadas do JSON e renderizar as texturas dos arquivos, lá é usada a dependência do DotTiled.  
 - DotTiled serve apenas para ler os tiles/texturas do JSON em uma lista, quem renderiza é o MonoGame com spriteBatch.Draw().  
 - O DotTiled tem classes internas predefinidas como TileLayer e ObjectLayer, essas classes estão no JSON e se referem as camadas de texturas criadas no Tiled, no exemplo a TileLayer recebe as coordenada para o arquivo TIL01 e a ObjectLayer recebe sobre o arquivo de textura OBJ01.
 
-# Conceito atual
-![Conceito atual](IceFire/Content/Tiles/Tiled/MAP01.png)
-
-# Definições do jogo:
+# Definições
 
 - São apenas 4 direções disponíveis para movimentação, assim como no Bomberman.
 - São 3 elementos magicos: Neutro, Gelo e Fogo.
@@ -50,7 +50,7 @@
 - Monstros de gelo e fogo podem usar ataque físico/neutro.
 - Monstro neutro só causa dano neutro mas podem usar magias do tipo neutro.
 
-# Etapas:
+# Etapas
 
 - ✅ - Puxar para o código as configurações de Tile Map geradas pelo Tiled e renderizar na tela.
 - ⬜ - Criar ajuste automático escalando o tamanho da tela de jogo com a resolução atual da maquina que está executando o jogo.  
@@ -68,4 +68,3 @@
 - ⬜ - Criar arte de menu inicial com Splash Screeen.
 - ⬜ - Criar/obter BGMs e Audio FX para o jogo.
 - ⬜ - Criar enredo simples para abertura e diálogos durante o jogo.
-
