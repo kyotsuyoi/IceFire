@@ -6,8 +6,11 @@
  <tileset firstgid="1" name="OBJ01" tilewidth="32" tileheight="32" tilecount="16" columns="4">
   <image source="../Sprites/OBJ01.png" width="128" height="128"/>
  </tileset>
- <tileset firstgid="17" name="GND01" tilewidth="32" tileheight="32" tilecount="36" columns="6">
-  <image source="../Sprites/GND01.png" width="192" height="192"/>
+ <tileset firstgid="17" name="TIL01" tilewidth="32" tileheight="32" tilecount="36" columns="6">
+  <image source="../Sprites/TIL01.png" width="192" height="192"/>
+ </tileset>
+ <tileset firstgid="53" name="TIL01" tilewidth="32" tileheight="32" tilecount="36" columns="6">
+  <image source="E:/NewGame/Sprites/TIL01.png" width="192" height="192"/>
  </tileset>
  <layer id="1" name="Ground" class="Ground" width="30" height="20">
   <data encoding="csv">

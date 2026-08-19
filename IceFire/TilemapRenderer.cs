@@ -19,7 +19,7 @@ namespace IceFire
         {
             _textures = new Dictionary<string, Texture2D>(StringComparer.OrdinalIgnoreCase)
             {
-                ["GND01"] = groundTexture,
+                ["TIL01"] = groundTexture,
                 ["OBJ01"] = objectTexture
             };
 

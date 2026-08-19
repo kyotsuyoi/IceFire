@@ -32,7 +32,7 @@ namespace IceFire
 
             _tilemap = new TilemapRenderer(
                 Path.Combine(AppContext.BaseDirectory, "Content", "Tiles", "Tiled", "MAP01.json"),
-                Content.Load<Texture2D>("Tiles/Sprites/GND01"),
+                Content.Load<Texture2D>("Tiles/Sprites/TIL01"),
                 Content.Load<Texture2D>("Tiles/Sprites/OBJ01")
             );
         }

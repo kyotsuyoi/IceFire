@@ -13,10 +13,10 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Tiles/Sprites/GND01.png
+#begin Tiles/Sprites/TIL01.png
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:Tiles/Sprites/GND01.png
+/build:Tiles/Sprites/TIL01.png
 
 #begin Tiles/Sprites/OBJ01.png
 /importer:TextureImporter
