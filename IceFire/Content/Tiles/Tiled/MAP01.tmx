@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" class="Ground" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="674">
+<map version="1.10" tiledversion="1.12.2" class="Ground" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="699">
  <editorsettings>
   <export target="MAP01.json" format="json"/>
  </editorsettings>
@@ -37,12 +37,6 @@
 </data>
  </layer>
  <objectgroup color="#000000" id="2" name="Object" class="Object">
-  <object id="23" gid="1" x="96" y="32" width="32" height="32"/>
-  <object id="24" gid="2" x="32" y="576" width="32" height="32"/>
-  <object id="35" gid="7" x="496" y="297" width="32" height="32"/>
-  <object id="36" gid="7" x="496" y="273" width="32" height="32"/>
-  <object id="37" gid="7" x="559" y="272" width="32" height="32"/>
-  <object id="38" gid="7" x="560" y="297" width="32" height="32"/>
   <object id="191" gid="2147483657" x="576" y="544" width="32" height="32"/>
   <object id="192" gid="2147483657" x="448" y="416" width="32" height="32"/>
   <object id="193" gid="2147483657" x="448" y="480" width="32" height="32"/>
@@ -184,7 +178,6 @@
   <object id="339" gid="8" x="96" y="640" width="32" height="32"/>
   <object id="340" gid="8" x="96" y="608" width="32" height="32"/>
   <object id="341" gid="8" x="96" y="576" width="32" height="32"/>
-  <object id="342" gid="8" x="64" y="576" width="32" height="32"/>
   <object id="344" gid="8" x="192" y="576" width="32" height="32"/>
   <object id="345" gid="8" x="128" y="576" width="32" height="32"/>
   <object id="346" gid="8" x="160" y="576" width="32" height="32"/>
@@ -255,9 +248,7 @@
   <object id="411" gid="8" x="608" y="224" width="32" height="32"/>
   <object id="412" gid="8" x="448" y="256" width="32" height="32"/>
   <object id="413" gid="11" x="480" y="256" width="32" height="32"/>
-  <object id="414" gid="11" x="480" y="288" width="32" height="32"/>
   <object id="415" gid="11" x="480" y="320" width="32" height="32"/>
-  <object id="416" gid="11" x="448" y="320" width="32" height="32"/>
   <object id="417" gid="11" x="672" y="352" width="32" height="32"/>
   <object id="418" gid="11" x="736" y="352" width="32" height="32"/>
   <object id="419" gid="11" x="768" y="352" width="32" height="32"/>
@@ -370,18 +361,8 @@
   <object id="538" gid="4" x="640" y="160" width="32" height="32"/>
   <object id="539" gid="4" x="832" y="224" width="32" height="32"/>
   <object id="540" gid="4" x="576" y="160" width="32" height="32"/>
-  <object id="541" gid="5" x="96" y="64" width="32" height="32"/>
-  <object id="542" gid="6" x="32" y="608" width="32" height="32"/>
   <object id="543" gid="3" x="736" y="384" width="32" height="32"/>
   <object id="544" gid="9" x="704" y="384" width="32" height="32"/>
-  <object id="546" gid="15" x="416" y="320" width="32" height="32"/>
-  <object id="547" gid="15" x="384" y="384" width="32" height="32"/>
-  <object id="548" gid="15" x="224" y="320" width="32" height="32"/>
-  <object id="549" gid="15" x="224" y="480" width="32" height="32"/>
-  <object id="550" gid="15" x="416" y="480" width="32" height="32"/>
-  <object id="551" gid="15" x="96" y="288" width="32" height="32"/>
-  <object id="552" gid="15" x="320" y="128" width="32" height="32"/>
-  <object id="553" gid="15" x="256" y="128" width="32" height="32"/>
   <object id="586" gid="16" x="320" y="640" width="32" height="32"/>
   <object id="587" gid="16" x="320" y="608" width="32" height="32"/>
   <object id="588" gid="16" x="320" y="576" width="32" height="32"/>
@@ -470,5 +451,23 @@
   <object id="671" gid="16" x="864" y="192" width="32" height="32"/>
   <object id="672" gid="16" x="896" y="192" width="32" height="32"/>
   <object id="673" gid="16" x="928" y="192" width="32" height="32"/>
+  <object id="674" name="PlayerSpawn1" gid="1" x="32" y="576" width="32" height="32"/>
+  <object id="676" name="PlayerSpawn2" gid="2" x="32" y="640" width="32" height="32"/>
+  <object id="677" gid="2147483680" x="-16" y="576" width="32" height="32"/>
+  <object id="680" gid="6" x="416" y="320" width="32" height="32"/>
+  <object id="681" gid="6" x="384" y="256" width="32" height="32"/>
+  <object id="682" gid="5" x="256" y="512" width="32" height="32"/>
+  <object id="683" gid="5" x="160" y="416" width="32" height="32"/>
+  <object id="684" gid="5" x="224" y="320" width="32" height="32"/>
+  <object id="685" gid="5" x="288" y="160" width="32" height="32"/>
+  <object id="686" gid="5" x="96" y="64" width="32" height="32"/>
+  <object id="687" gid="6" x="192" y="256" width="32" height="32"/>
+  <object id="689" gid="6" x="416" y="416" width="32" height="32"/>
+  <object id="690" name="BlockerSlime" gid="7" x="480" y="288" width="32" height="32"/>
+  <object id="691" gid="7" x="1069" y="431" width="32" height="32"/>
+  <object id="693" gid="15" x="553" y="294" width="32" height="32"/>
+  <object id="694" gid="15" x="552" y="271" width="32" height="32"/>
+  <object id="697" gid="15" x="503" y="294" width="32" height="32"/>
+  <object id="698" gid="15" x="503" y="271" width="32" height="32"/>
  </objectgroup>
 </map>

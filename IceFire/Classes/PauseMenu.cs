@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace IceFire
+namespace IceFire.Classes
 {
     public readonly record struct PauseMenuResult(Point? Resolution, bool ToggleFullscreen);
 
@@ -19,8 +19,12 @@ namespace IceFire
         private readonly Texture2D _pixel;
         private int _selectedOption;
 
-        public PauseMenu(SpriteFont font, Texture2D pixel)
+        public PauseMenu(SpriteFont font, GraphicsDevice graphicsDevice)
         {
+            var pixel = new Texture2D(graphicsDevice, 1, 1);
+            //Menu theme color
+            pixel.SetData([Color.Blue]);
+
             _font = font;
             _pixel = pixel;
         }
@@ -35,36 +39,36 @@ namespace IceFire
                 return default;
             }
 
-            if (!IsOpen)
-            {
-                return default;
-            }
+            if (!IsOpen) return default;
 
             var optionCount = Resolutions.Length + 1;
-            if (command == InputCommand.Up)
-            {
-                _selectedOption = (_selectedOption - 1 + optionCount) % optionCount;
-            }
-            else if (command == InputCommand.Down)
-            {
-                _selectedOption = (_selectedOption + 1) % optionCount;
-            }
-            else if (command == InputCommand.Confirm)
-            {
-                return _selectedOption < Resolutions.Length
-                    ? new PauseMenuResult(Resolutions[_selectedOption], false)
-                    : new PauseMenuResult(null, true);
-            }
 
-            return default;
+            var result = default(PauseMenuResult);
+            switch (command)
+            {
+                case InputCommand.Up:
+                    _selectedOption = (_selectedOption - 1 + optionCount) % optionCount;
+                    break;
+
+                case InputCommand.Down:
+                    _selectedOption = (_selectedOption + 1) % optionCount;
+                    break;
+
+                case InputCommand.Confirm:
+                    result = new PauseMenuResult(null, true);
+                    if (_selectedOption < Resolutions.Length) 
+                        result = new PauseMenuResult(Resolutions[_selectedOption], false);
+                    break;
+                default:
+                    result = default;
+                    break;
+            }
+            return result;
         }
 
         public void Draw(SpriteBatch spriteBatch, Point virtualSize)
         {
-            if (!IsOpen)
-            {
-                return;
-            }
+            if (!IsOpen) return;
 
             var menuBounds = new Rectangle((virtualSize.X - 400) / 2, (virtualSize.Y - 350) / 2, 400, 350);
             _spriteBatchDrawOverlay(spriteBatch, virtualSize);
@@ -75,21 +79,19 @@ namespace IceFire
             for (var index = 0; index <= Resolutions.Length; index++)
             {
                 var isSelected = index == _selectedOption;
-                var text = index < Resolutions.Length
-                    ? $"{Resolutions[index].X} x {Resolutions[index].Y}"
-                    : "Fullscreen";
-                var position = new Vector2(menuBounds.X + 85, menuBounds.Y + 120 + index * 40);
+                var text = "Fullscreen";
+                if (index < Resolutions.Length) text=$"{Resolutions[index].X} x {Resolutions[index].Y}";
 
+                var position = new Vector2(menuBounds.X + 85, menuBounds.Y + 120 + index * 40);
                 if (isSelected)
-                {
-                    spriteBatch.Draw(_pixel, new Rectangle(menuBounds.X + 60, (int)position.Y - 4, 280, 34), new Color(69, 107, 168));
-                }
+                    spriteBatch.Draw(_pixel, new Rectangle(menuBounds.X + 60, (int)position.Y, 280, 34), new Color(69, 107, 168));                
 
                 spriteBatch.DrawString(_font, text, position, isSelected ? Color.White : Color.LightGray);
             }
 
-            spriteBatch.DrawString(_font, "Arrow keys or D-pad: navigate", new Vector2(menuBounds.X + 55, menuBounds.Bottom + 25), Color.LightGray);
-            spriteBatch.DrawString(_font, "Enter or A: confirm | Esc or Start: back", new Vector2(menuBounds.X + 15, menuBounds.Bottom + 52), Color.LightGray);
+            //spriteBatch.DrawString(_font, "Arrow keys or D-pad: navigate", new Vector2(menuBounds.X + 55, menuBounds.Bottom + 25), Color.LightGray);
+            spriteBatch.DrawString(_font, "Enter or A: confirm", new Vector2(menuBounds.X + 25, menuBounds.Bottom + 25), Color.LightGray);
+            spriteBatch.DrawString(_font, "Esc or Start: back", new Vector2(menuBounds.X + 25, menuBounds.Bottom + 52), Color.LightGray);
         }
 
         private void _spriteBatchDrawOverlay(SpriteBatch spriteBatch, Point virtualSize)

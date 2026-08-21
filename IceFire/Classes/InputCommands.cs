@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.ComponentModel.Design;
 
-namespace IceFire
+namespace IceFire.Classes
 {
     public enum InputCommand
     {

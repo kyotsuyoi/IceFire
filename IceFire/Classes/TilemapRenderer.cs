@@ -7,7 +7,7 @@ using DotTiled.Serialization.Tmj;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace IceFire
+namespace IceFire.Classes
 {
     public sealed class TilemapRenderer
     {
@@ -55,11 +55,14 @@ namespace IceFire
         private void DrawTileLayer(SpriteBatch spriteBatch, TileLayer layer)
         {
             var data = layer.Data!.Value;
+            //Tile ID starts on 17
+            //ID 17 corresponds to ID 0 of the TIL01 file in the Tiled application
             var globalTileIds = data.GlobalTileIDs!.Value;
             var flippingFlags = data.FlippingFlags!.Value;
 
             for (var index = 0; index < globalTileIds.Length; index++)
             {
+                //int TileID = GetTileID(globalTileIds[index]);
                 var x = index % layer.Width;
                 var y = index / layer.Width;
                 DrawTile(spriteBatch, globalTileIds[index], flippingFlags[index], new Vector2(x * _map.TileWidth, y * _map.TileHeight));
@@ -70,6 +73,8 @@ namespace IceFire
         {
             foreach (var tileObject in layer.Objects.OfType<TileObject>())
             {
+                //Ignore the invisible collision object with ID 15 in Tiled
+                //if (tileObject.GID-1 == 15) continue;
                 DrawTile(spriteBatch, tileObject.GID, tileObject.FlippingFlags, new Vector2(tileObject.X, tileObject.Y - tileObject.Height));
             }
         }
@@ -120,6 +125,22 @@ namespace IceFire
             if (verticallyFlipped) effects |= SpriteEffects.FlipVertically;            
 
             return (0f, effects);
+        }
+    
+        private int GetTileID(uint globalTileId)
+        {
+            if (globalTileId == 0) return -1;
+            dynamic tileset = _tilesets.Last(tileset => (uint)tileset.FirstGID.Value <= globalTileId);
+            return (int)(globalTileId - (uint)tileset.FirstGID.Value);
+        }
+
+        //Get object on JSON Tiled map by name. This method is used to retrieve the player spawn point or other objects defined in the Tiled map.
+        public DotTiled.Object GetObjectByName(string name)
+        {
+            ObjectLayer layer = ((IEnumerable<BaseLayer>)_map.Layers).OfType<ObjectLayer>().FirstOrDefault(l => l.Name == "Object");    
+            if (layer == null) return null;    
+            DotTiled.Object tiledObject = layer.Objects.FirstOrDefault(o => o.Name == name);
+            return tiledObject;
         }
     }
 }
