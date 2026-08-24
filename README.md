@@ -53,7 +53,7 @@
 # Etapas
 
 - ✅ - Puxar para o código as configurações de Tile Map geradas pelo Tiled e renderizar na tela.
-- ⬜ - Criar ajuste automático escalando o tamanho da tela de jogo com a resolução atual da maquina que está executando o jogo.  
+- ✅ - Criar ajuste automático escalando o tamanho da tela de jogo com a resolução atual da maquina que está executando o jogo.  
 - ⬜ - Criar classes de mapeamento de Joystick/Keyboard preparadas para receber alterações via menu em tempo de execução.  
 - ⬜ - Criar classe que transfere comandos mapeados para a personagem e movimentar ela na tela.  
 - ⬜ - Criar classes de colisão com objetos para impedir que a personagem atravesse paredes ou saia da tela.  
