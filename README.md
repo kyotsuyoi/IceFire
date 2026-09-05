@@ -52,8 +52,7 @@
 
 # Etapas
 
-- ✅ - Criar Tile Grounds básicos para iniciar os testes de renderização com o MonoGame.
-- ✅ - Criar Tile Objetcts básicos para iniciar os testes de renderização com o MonoGame.
+- ✅ - Criar Tile Grounds e Tile Objetcts básicos para iniciar os testes de renderização com o MonoGame.
 - ✅ - Puxar para o código as configurações de Tile Map geradas pelo Tiled e renderizar na tela.
 - ✅ - Criar ajuste automático escalando o tamanho da tela de jogo com a resolução atual da maquina que está executando o jogo.
 - 🔄 - (50%) Criar Sprites da personagem FireHair.  
