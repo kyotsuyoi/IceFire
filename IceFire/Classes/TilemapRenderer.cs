@@ -75,6 +75,10 @@ namespace IceFire.Classes
             {
                 //Ignore the invisible collision object with ID 15 in Tiled
                 //if (tileObject.GID-1 == 15) continue;
+
+                //Ignore the players spawn point object with ID 0 and ID 1 in Tiled
+                if (tileObject.GID-1 == 0 || tileObject.GID-1 == 1) continue;
+
                 DrawTile(spriteBatch, tileObject.GID, tileObject.FlippingFlags, new Vector2(tileObject.X, tileObject.Y - tileObject.Height));
             }
         }

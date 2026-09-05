@@ -18,6 +18,7 @@ namespace IceFire.Classes
         private readonly SpriteFont _font;
         private readonly Texture2D _pixel;
         private int _selectedOption;
+        private InputCommand _previousCommand = InputCommand.None;
 
         public PauseMenu(SpriteFont font, GraphicsDevice graphicsDevice)
         {
@@ -42,27 +43,29 @@ namespace IceFire.Classes
             if (!IsOpen) return default;
 
             var optionCount = Resolutions.Length + 1;
-
             var result = default(PauseMenuResult);
-            switch (command)
+
+            if (command != _previousCommand)
             {
-                case InputCommand.Up:
-                    _selectedOption = (_selectedOption - 1 + optionCount) % optionCount;
-                    break;
+                switch (command)
+                {
+                    case InputCommand.Up:
+                        _selectedOption = (_selectedOption - 1 + optionCount) % optionCount;
+                        break;
 
-                case InputCommand.Down:
-                    _selectedOption = (_selectedOption + 1) % optionCount;
-                    break;
+                    case InputCommand.Down:
+                        _selectedOption = (_selectedOption + 1) % optionCount;
+                        break;
 
-                case InputCommand.Confirm:
-                    result = new PauseMenuResult(null, true);
-                    if (_selectedOption < Resolutions.Length) 
-                        result = new PauseMenuResult(Resolutions[_selectedOption], false);
-                    break;
-                default:
-                    result = default;
-                    break;
+                    case InputCommand.Confirm:
+                        result = new PauseMenuResult(null, true);
+                        if (_selectedOption < Resolutions.Length)
+                            result = new PauseMenuResult(Resolutions[_selectedOption], false);
+                        break;
+                }
             }
+
+            _previousCommand = command;
             return result;
         }
 

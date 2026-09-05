@@ -15,6 +15,7 @@ namespace IceFire
         private InputCommands _inputCommands;
         private PauseMenu _pauseMenu;
         private Screen _screen;
+        private PlayerSprite _player;
 
         public Game1()
         {
@@ -49,6 +50,12 @@ namespace IceFire
             var playerSpawn2 = _tilemap.GetObjectByName("PlayerSpawn2");
             var playerSpawn1Point = new Point((int)playerSpawn1.X, (int)playerSpawn1.Y);
             var playerSpawn2Point = new Point((int)playerSpawn2.X, (int)playerSpawn2.Y);
+
+            // Create and load player sprite. PlayerSprite will load animations on demand.
+            _player = new PlayerSprite(Content);
+            // Load a default sprite (idle right) and set initial position to spawn point
+            _player.Load("SpriteC0101");
+            _player.Position = new Vector2(playerSpawn1Point.X, playerSpawn1Point.Y - 48); // align to bottom of tile
         }
 
         protected override void Update(GameTime gameTime)
@@ -56,6 +63,12 @@ namespace IceFire
             var command = _inputCommands.Update();
             var menuResult = _pauseMenu.Update(command);
             _screen.SetResolution(menuResult);
+
+            // If menu is open, pause game updates (do not advance player or world)
+            if (!_pauseMenu.IsOpen)
+            {
+                _player?.Update(gameTime, command);
+            }
 
             base.Update(gameTime);
         }
@@ -67,6 +80,7 @@ namespace IceFire
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _tilemap.Draw(_spriteBatch);
+            _player?.Draw(_spriteBatch);
             _pauseMenu.Draw(_spriteBatch, _tilemap.Size);
             _spriteBatch.End();
 

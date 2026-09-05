@@ -28,3 +28,34 @@
 /processor:FontDescriptionProcessor
 /build:Fonts/MenuFont.spritefont
 
+
+#begin Sprites/SpriteC0101.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Sprites/SpriteC0101.png
+
+#begin Sprites/SpriteC0102.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Sprites/SpriteC0102.png
+
+#begin Sprites/SpriteC0103.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Sprites/SpriteC0103.png
+
+#begin Sprites/SpriteC0104.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Sprites/SpriteC0104.png
+
+#begin Sprites/SpriteC0105.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Sprites/SpriteC0105.png
+
+#begin Sprites/SpriteC0106.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Sprites/SpriteC0106.png
+
