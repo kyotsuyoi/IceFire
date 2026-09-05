@@ -53,9 +53,12 @@
 # Etapas
 
 - ✅ - Puxar para o código as configurações de Tile Map geradas pelo Tiled e renderizar na tela.
-- ✅ - Criar ajuste automático escalando o tamanho da tela de jogo com a resolução atual da maquina que está executando o jogo.  
+- ✅ - Criar ajuste automático escalando o tamanho da tela de jogo com a resolução atual da maquina que está executando o jogo.- 
+- 🔄 - (50%) Criar Sprites da personagem FireHair.  
+- 🔄 - (20%) Criar Sprites da personagem IceBreath. 
 - ⬜ - Criar classes de mapeamento de Joystick/Keyboard preparadas para receber alterações via menu em tempo de execução.  
-- ⬜ - Criar classe que transfere comandos mapeados para a personagem e movimentar ela na tela.  
+- 🔄 - (60%) Criar classe que transfere comandos mapeados para a personagem e movimentar ela na tela.  
+- 🔄 - (50%) Realizar o SpawnPoint dos players no mapa e controla-los na tela.  
 - ⬜ - Criar classes de colisão com objetos para impedir que a personagem atravesse paredes ou saia da tela.  
 - ⬜ - Criar interação da personagem com objetos coletáveis ou destrutíveis.  
 - ⬜ - Criar classe ou método para primeiro spawn de inimigos no mapa a partir da posição inicial definida no JSON do Tiled.  
