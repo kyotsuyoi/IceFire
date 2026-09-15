@@ -61,7 +61,7 @@
 - 🔄 - (60%) Criar classe que transfere comandos mapeados para a personagem e movimentar ela na tela.  
 - ✅ - Realizar o SpawnPoint dos players no mapa e controla-los na tela.  
 - ✅ - Criar classes de colisão com objetos para impedir que a personagem atravesse paredes ou saia da tela.
-![Conceito atual](IceFire/Content/Tiles/Tiled/CollisionMap.png)
+- ![Conceito atual](IceFire/Content/Tiles/Tiled/CollisionMap.png)
 - ⬜ - Criar sprites de objetos coletáveis ou destrutíveis.
 - ⬜ - Criar interação da personagem com objetos coletáveis ou destrutíveis.  
 - ⬜ - Criar Sprites para os inimigos se movimentarem na tela.
