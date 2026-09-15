@@ -56,11 +56,12 @@
 - ✅ - Puxar para o código as configurações de Tile Map geradas pelo Tiled e renderizar na tela.
 - ✅ - Criar ajuste automático escalando o tamanho da tela de jogo com a resolução atual da maquina que está executando o jogo.
 - 🔄 - (50%) Criar Sprites da personagem FireHair.  
-- 🔄 - (20%) Criar Sprites da personagem IceBreath. 
+- 🔄 - (50%) Criar Sprites da personagem IceBreath. 
 - ⬜ - Criar classes de mapeamento de Joystick/Keyboard preparadas para receber alterações via menu em tempo de execução.  
 - 🔄 - (60%) Criar classe que transfere comandos mapeados para a personagem e movimentar ela na tela.  
-- 🔄 - (50%) Realizar o SpawnPoint dos players no mapa e controla-los na tela.  
-- ⬜ - Criar classes de colisão com objetos para impedir que a personagem atravesse paredes ou saia da tela.  
+- ✅ - Realizar o SpawnPoint dos players no mapa e controla-los na tela.  
+- ✅ - Criar classes de colisão com objetos para impedir que a personagem atravesse paredes ou saia da tela.
+![Conceito atual](IceFire/Content/Tiles/Tiled/CollisionMap.png)
 - ⬜ - Criar sprites de objetos coletáveis ou destrutíveis.
 - ⬜ - Criar interação da personagem com objetos coletáveis ou destrutíveis.  
 - ⬜ - Criar Sprites para os inimigos se movimentarem na tela.
@@ -68,10 +69,10 @@
 - ⬜ - Criar sprites de efeitos visuais para danos em jogadores, inimigos, e poderes. 
 - ⬜ - Criar interação da personagem com inimigos (monstro recebe ataque).  
 - ⬜ - Criar interação dos inimigos com as personagens (personagem recebe ataque), os inimigos precisam detectar a presença do jogador e usar seus golpes disponíveis.  
-- ⬜ - Criar menu inicial com Start Game o Options onde Start Game vai para a primeira tela disponível e Options será para configurar mapeamento de controles, áudio e vídeo.
-- ⬜ - Criar uma tela de seleção de fases para teste.
-- ⬜ - Criar uma tela no menu de pausa para habilitar/desabilitar PowerUp e debug para testes.
-- ⬜ - Criar ao menos 10 fases.
+- 🔄 - (30%) Criar menu inicial com Start Game o Options onde Start Game vai para a primeira tela disponível e Options será para configurar mapeamento de controles, áudio e vídeo.
+- ✅ - Criar uma tela de seleção de fases para teste.
+- ✅ - Criar uma tela no menu de pausa para habilitar/desabilitar PowerUp e debug para testes.
+- 🔄 - (10%) Criar ao menos 10 fases.
 - ⬜ - Criar World Map para progressão de fases do jogo.
 - ⬜ - Criar arte de menu inicial com Splash Screeen.
 - ⬜ - Criar/obter BGMs e Audio FX para o jogo.
