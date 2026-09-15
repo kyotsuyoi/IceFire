@@ -55,8 +55,10 @@
 - ✅ - Criar Tile Grounds e Tile Objetcts básicos para iniciar os testes de renderização com o MonoGame.
 - ✅ - Puxar para o código as configurações de Tile Map geradas pelo Tiled e renderizar na tela.
 - ✅ - Criar ajuste automático escalando o tamanho da tela de jogo com a resolução atual da maquina que está executando o jogo.
-- 🔄 - (50%) Criar Sprites da personagem FireHair.  
-- 🔄 - (50%) Criar Sprites da personagem IceBreath. 
+- 🔄 - (50%) Criar Sprites da personagem FireHair.
+- ![Conceito atual](IceFire/Content/Sprites/SpriteC0101.png)
+- 🔄 - (50%) Criar Sprites da personagem IceBreath.
+- ![Conceito atual](IceFire/Content/Sprites/SpriteC0201.png)
 - ⬜ - Criar classes de mapeamento de Joystick/Keyboard preparadas para receber alterações via menu em tempo de execução.  
 - 🔄 - (60%) Criar classe que transfere comandos mapeados para a personagem e movimentar ela na tela.  
 - ✅ - Realizar o SpawnPoint dos players no mapa e controla-los na tela.  
