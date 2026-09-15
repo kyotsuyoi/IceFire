@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System.ComponentModel.Design;
 
 namespace IceFire.Classes
 {
@@ -12,7 +11,9 @@ namespace IceFire.Classes
         Down,
         Left,
         Right,
-        Confirm
+        Confirm,
+        Start,
+        Back
     }
 
     public sealed class InputCommands
@@ -34,9 +35,14 @@ namespace IceFire.Classes
 
         private InputCommand GetCommand(KeyboardState keyboardState, GamePadState gamePadState)
         {
-            if (IsPressed(keyboardState, Keys.Escape) || IsPressed(gamePadState, Buttons.Start) || IsPressed(gamePadState, Buttons.Back))
+            if (IsPressed(keyboardState, Keys.Escape) || IsPressed(gamePadState, Buttons.Back) || IsPressed(gamePadState, Buttons.B))
             {
-                return InputCommand.Pause;
+                return InputCommand.Back;
+            }
+
+            if (IsPressed(gamePadState, Buttons.Start))
+            {
+                return InputCommand.Start;
             }
 
             if (keyboardState.IsKeyDown(Keys.Up) || gamePadState.IsButtonDown(Buttons.DPadUp) || IsThumbstickHeld(gamePadState, 1))

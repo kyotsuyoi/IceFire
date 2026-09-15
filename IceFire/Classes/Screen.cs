@@ -41,16 +41,21 @@ namespace IceFire.Classes
 
         public void SetResolution(PauseMenuResult pauseMenuResult)
         {
-            if (pauseMenuResult.Resolution is Microsoft.Xna.Framework.Point resolution)
+            if (pauseMenuResult.Action == PauseMenuAction.ResolutionChanged && pauseMenuResult.Resolution is Microsoft.Xna.Framework.Point resolution)
             {
                 _graphics.IsFullScreen = false;
                 _graphics.PreferredBackBufferWidth = resolution.X;
                 _graphics.PreferredBackBufferHeight = resolution.Y;
             }
-            else if (pauseMenuResult.ToggleFullscreen)
+            else if (pauseMenuResult.Action == PauseMenuAction.ToggleFullscreen)
             {
                 _graphics.IsFullScreen = !_graphics.IsFullScreen;
             }
+            else
+            {
+                return;
+            }
+
             _graphics.ApplyChanges();
         }
     }

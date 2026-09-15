@@ -14,13 +14,14 @@ namespace IceFire.Classes
         private readonly dynamic _map;
         private readonly Dictionary<string, Texture2D> _textures;
         private readonly List<dynamic> _tilesets;
+        public CollisionMap Collision { get; }
 
-        public TilemapRenderer(string mapPath, Texture2D groundTexture, Texture2D objectTexture)
+        public TilemapRenderer(string mapPath, Texture2D groundTexture, Texture2D objectTexture, string groundName, string objectName)
         {
             _textures = new Dictionary<string, Texture2D>(StringComparer.OrdinalIgnoreCase)
             {
-                ["TIL01"] = groundTexture,
-                ["OBJ01"] = objectTexture
+                [groundName] = groundTexture,
+                [objectName] = objectTexture
             };
 
             _map = new TmjMapReader(
@@ -31,6 +32,12 @@ namespace IceFire.Classes
             ).ReadMap();
 
             _tilesets = ((IEnumerable<dynamic>)_map.Tilesets).OrderBy(tileset => (uint)tileset.FirstGID.Value).ToList();
+            Collision = new CollisionMap(ReadBlockedAreas(), new Rectangle(Point.Zero, Size));
+        }
+
+        public void DrawCollisionDebug(SpriteBatch spriteBatch, Texture2D pixel)
+        {
+            Collision.DrawDebug(spriteBatch, pixel);
         }
 
         public Point Size => new((int)_map.Width * (int)_map.TileWidth, (int)_map.Height * (int)_map.TileHeight);
@@ -73,14 +80,48 @@ namespace IceFire.Classes
         {
             foreach (var tileObject in layer.Objects.OfType<TileObject>())
             {
-                //Ignore the invisible collision object with ID 15 in Tiled
-                //if (tileObject.GID-1 == 15) continue;
+                if (!GetBoolProperty(tileObject, "visible", true)) continue;
 
                 //Ignore the players spawn point object with ID 0 and ID 1 in Tiled
                 if (tileObject.GID-1 == 0 || tileObject.GID-1 == 1) continue;
 
                 DrawTile(spriteBatch, tileObject.GID, tileObject.FlippingFlags, new Vector2(tileObject.X, tileObject.Y - tileObject.Height));
             }
+        }
+
+        private IEnumerable<Rectangle> ReadBlockedAreas()
+        {
+            foreach (var layer in ((IEnumerable<BaseLayer>)_map.Layers).OfType<ObjectLayer>())
+            {
+                foreach (var tileObject in layer.Objects.OfType<TileObject>())
+                {
+                    if (!GetBoolProperty(tileObject, "block", false)) continue;
+
+                    yield return new Rectangle(
+                        (int)tileObject.X,
+                        (int)tileObject.Y - (int)tileObject.Height,
+                        (int)tileObject.Width,
+                        (int)tileObject.Height);
+                }
+            }
+        }
+
+        private static bool GetBoolProperty(dynamic tiledObject, string propertyName, bool defaultValue)
+        {
+            try
+            {
+                foreach (dynamic property in tiledObject.Properties)
+                {
+                    if (!string.Equals((string)property.Name, propertyName, StringComparison.OrdinalIgnoreCase)) continue;
+                    return Convert.ToBoolean(property.Value);
+                }
+            }
+            catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+            {
+                return defaultValue;
+            }
+
+            return defaultValue;
         }
 
         private void DrawTile(SpriteBatch spriteBatch, uint globalTileId, FlippingFlags flippingFlags, Vector2 position)

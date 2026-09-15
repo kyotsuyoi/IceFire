@@ -59,3 +59,33 @@
 /processor:TextureProcessor
 /build:Sprites/SpriteC0106.png
 
+#begin Sprites/SpriteC0201.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Sprites/SpriteC0201.png
+
+#begin Sprites/SpriteC0202.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Sprites/SpriteC0202.png
+
+#begin Sprites/SpriteC0203.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Sprites/SpriteC0203.png
+
+#begin Sprites/SpriteC0204.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Sprites/SpriteC0204.png
+
+#begin Sprites/SpriteC0205.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Sprites/SpriteC0205.png
+
+#begin Sprites/SpriteC0206.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Sprites/SpriteC0206.png
+
