@@ -18,20 +18,26 @@ namespace IceFire.Classes
         private readonly Animation _castAnimation;
         private readonly Animation _plantedAnimation;
         private readonly Animation _burstAnimation;
+        private readonly Animation _detonationAnimation;
         private readonly List<Wave> _waves = [];
+        private readonly List<DestructibleImpact> _destructibleImpacts = [];
+        private readonly ContentManager _content;
         private readonly Vector2 _origin;
         private SpellState _state = SpellState.Casting;
         private float _detonationElapsed;
         private float _explosionElapsed;
+        private bool _detonationAnimationFinished;
         private readonly float _maximumExplosionDistance;
 
         public Spell(ContentManager content, Vector2 position, int detonationPower)
         {
+            _content = content;
             _origin = position;
             _maximumExplosionDistance = Math.Clamp(detonationPower, 1, 10) * Size;
             _castAnimation = LoadAnimation(content, "Spell01");
             _plantedAnimation = LoadAnimation(content, "Spell02");
             _burstAnimation = LoadAnimation(content, "Spell03");
+            _detonationAnimation = LoadAnimation(content, "Spell04");
         }
 
         public bool IsFinished => _state == SpellState.Finished;
@@ -59,6 +65,13 @@ namespace IceFire.Classes
 
         public IReadOnlyList<Rectangle> PlayerBlockingBounds => IsPlanted ? [Bounds] : [];
 
+        public IReadOnlyList<DestructibleImpact> ConsumeDestructibleImpacts()
+        {
+            var impacts = _destructibleImpacts.ToArray();
+            _destructibleImpacts.Clear();
+            return impacts;
+        }
+
         public void Update(GameTime gameTime, CollisionMap collision, IReadOnlyList<Spell> otherSpells)
         {
             var elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -84,8 +97,10 @@ namespace IceFire.Classes
 
                 case SpellState.Burst:
                     _burstAnimation.Update(elapsed, loop: true);
+                    _detonationAnimationFinished = _detonationAnimation.Update(elapsed, loop: false) || _detonationAnimationFinished;
                     _explosionElapsed += elapsed;
                     UpdateWaves(elapsed / 1000f, collision, otherSpells);
+                    UpdateFadingWaves(elapsed);
                     if (_explosionElapsed >= ExplosionDuration || !HasActiveWaves())
                     {
                         _state = SpellState.Finished;
@@ -109,9 +124,9 @@ namespace IceFire.Classes
 
             foreach (var wave in _waves)
             {
-                if (wave.Active && wave.Bounds.Intersects(playerBounds))
+                    if (wave.Active && wave.Bounds.Intersects(playerBounds))
                 {
-                    wave.Active = false;
+                    wave.BeginFade();
                     return true;
                 }
             }
@@ -130,9 +145,13 @@ namespace IceFire.Classes
                     DrawAnimation(spriteBatch, _plantedAnimation, _origin);
                     break;
                 case SpellState.Burst:
+                    if (!_detonationAnimationFinished)
+                        DrawAnimation(spriteBatch, _detonationAnimation, _origin);
+
                     foreach (var wave in _waves)
                     {
                         if (wave.Active) DrawWave(spriteBatch, _burstAnimation, wave);
+                        else if (wave.Fading) DrawWave(spriteBatch, wave.EndAnimation, wave);
                     }
                     break;
             }
@@ -142,10 +161,12 @@ namespace IceFire.Classes
         {
             _state = SpellState.Burst;
             _burstAnimation.Reset();
-            _waves.Add(new Wave(_origin, new Vector2(-1, 0)));
-            _waves.Add(new Wave(_origin, new Vector2(1, 0)));
-            _waves.Add(new Wave(_origin, new Vector2(0, -1)));
-            _waves.Add(new Wave(_origin, new Vector2(0, 1)));
+            _detonationAnimation.Reset();
+            _detonationAnimationFinished = false;
+            _waves.Add(new Wave(_origin, new Vector2(-1, 0), LoadAnimation(_content, "Spell04")));
+            _waves.Add(new Wave(_origin, new Vector2(1, 0), LoadAnimation(_content, "Spell04")));
+            _waves.Add(new Wave(_origin, new Vector2(0, -1), LoadAnimation(_content, "Spell04")));
+            _waves.Add(new Wave(_origin, new Vector2(0, 1), LoadAnimation(_content, "Spell04")));
         }
 
         private void UpdateWaves(float seconds, CollisionMap collision, IReadOnlyList<Spell> otherSpells)
@@ -158,14 +179,16 @@ namespace IceFire.Classes
                 wave.DistanceTravelled += Vector2.Distance(wave.Position, nextPosition);
                 if (wave.DistanceTravelled >= _maximumExplosionDistance)
                 {
-                    wave.Active = false;
+                    wave.BeginFade();
                     continue;
                 }
 
                 var nextBounds = new Rectangle((int)nextPosition.X, (int)nextPosition.Y, Size, Size);
-                if (collision.TryDestroyDestructible(nextBounds))
+                if (collision.TryDestroyDestructible(nextBounds, out var destroyedObject))
                 {
-                    wave.Active = false;
+                    _destructibleImpacts.Add(new DestructibleImpact(
+                        new Vector2(destroyedObject.Bounds.X, destroyedObject.Bounds.Y), destroyedObject));
+                    wave.BeginFade();
                     continue;
                 }
 
@@ -179,11 +202,20 @@ namespace IceFire.Classes
 
                 if (!collision.CanOccupy(nextBounds, GetPlantedSpellAreas(otherSpells)))
                 {
-                    wave.Active = false;
+                    wave.BeginFade();
                     continue;
                 }
 
                 wave.Position = nextPosition;
+            }
+        }
+
+        private void UpdateFadingWaves(float milliseconds)
+        {
+            foreach (var wave in _waves)
+            {
+                if (wave.Fading && wave.EndAnimation.Update(milliseconds, loop: false))
+                    wave.CompleteFade();
             }
         }
 
@@ -202,7 +234,7 @@ namespace IceFire.Classes
         {
             foreach (var wave in _waves)
             {
-                if (wave.Active) return true;
+                if (wave.Active || wave.Fading) return true;
             }
 
             return false;
@@ -284,17 +316,30 @@ namespace IceFire.Classes
 
         private sealed class Wave
         {
-            public Wave(Vector2 position, Vector2 direction)
+            public Wave(Vector2 position, Vector2 direction, Animation endAnimation)
             {
                 Position = position;
                 Direction = direction;
+                EndAnimation = endAnimation;
             }
 
             public Vector2 Position { get; set; }
             public Vector2 Direction { get; }
             public bool Active { get; set; } = true;
+            public bool Fading { get; private set; }
             public float DistanceTravelled { get; set; }
+            public Animation EndAnimation { get; }
             public Rectangle Bounds => new((int)Position.X, (int)Position.Y, Size, Size);
+
+            public void BeginFade()
+            {
+                if (!Active && Fading) return;
+                Active = false;
+                Fading = true;
+                EndAnimation.Reset();
+            }
+
+            public void CompleteFade() => Fading = false;
         }
 
         private sealed class Animation
@@ -344,5 +389,6 @@ namespace IceFire.Classes
         }
 
         private readonly record struct Frame(Rectangle Source, float Duration);
+        public readonly record struct DestructibleImpact(Vector2 Position, CollisionObject Object);
     }
 }

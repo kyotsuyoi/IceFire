@@ -18,10 +18,17 @@ namespace IceFire.Classes
         public bool Destructible { get; }
         public uint GlobalTileId { get; }
         public bool IsDestroyed { get; private set; }
+        public bool DestructionPending { get; private set; }
 
-        public void Destroy()
+        public void BeginDestruction()
+        {
+            DestructionPending = true;
+        }
+
+        public void CompleteDestruction()
         {
             IsDestroyed = true;
+            DestructionPending = false;
         }
     }
 
@@ -149,20 +156,28 @@ namespace IceFire.Classes
             return true;
         }
 
-        public bool TryDestroyDestructible(Rectangle hitBounds)
+        public bool TryDestroyDestructible(Rectangle hitBounds, out CollisionObject destroyedObject)
         {
+            destroyedObject = null;
             foreach (var collisionObject in _collisionObjects)
             {
                 if (!collisionObject.IsDestroyed
+                    && !collisionObject.DestructionPending
                     && collisionObject.Destructible
                     && collisionObject.Bounds.Intersects(hitBounds))
                 {
-                    collisionObject.Destroy();
+                    collisionObject.BeginDestruction();
+                    destroyedObject = collisionObject;
                     return true;
                 }
             }
 
             return false;
+        }
+
+        public void CompleteDestruction(CollisionObject collisionObject)
+        {
+            collisionObject?.CompleteDestruction();
         }
 
         public bool IsDestroyed(Rectangle bounds, uint globalTileId)

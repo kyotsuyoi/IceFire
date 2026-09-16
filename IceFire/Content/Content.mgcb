@@ -104,3 +104,13 @@
 /processor:TextureProcessor
 /build:FX/Spell03.png
 
+#begin FX/Spell04.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:FX/Spell04.png
+
+#begin FX/Spell05.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:FX/Spell05.png
+

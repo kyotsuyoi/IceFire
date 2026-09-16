@@ -1,5 +1,5 @@
 { "frames": {
-   "Spell03 0.aseprite": {
+   "Spell05 0.aseprite": {
     "frame": { "x": 0, "y": 0, "w": 32, "h": 32 },
     "rotated": false,
     "trimmed": false,
@@ -7,7 +7,7 @@
     "sourceSize": { "w": 32, "h": 32 },
     "duration": 100
    },
-   "Spell03 1.aseprite": {
+   "Spell05 1.aseprite": {
     "frame": { "x": 32, "y": 0, "w": 32, "h": 32 },
     "rotated": false,
     "trimmed": false,
@@ -15,7 +15,7 @@
     "sourceSize": { "w": 32, "h": 32 },
     "duration": 100
    },
-   "Spell03 2.aseprite": {
+   "Spell05 2.aseprite": {
     "frame": { "x": 64, "y": 0, "w": 32, "h": 32 },
     "rotated": false,
     "trimmed": false,
@@ -23,7 +23,7 @@
     "sourceSize": { "w": 32, "h": 32 },
     "duration": 100
    },
-   "Spell03 3.aseprite": {
+   "Spell05 3.aseprite": {
     "frame": { "x": 96, "y": 0, "w": 32, "h": 32 },
     "rotated": false,
     "trimmed": false,
@@ -35,7 +35,7 @@
  "meta": {
   "app": "https://www.aseprite.org/",
   "version": "1.3.10.1-x64",
-  "image": "Spell03.png",
+  "image": "Spell05.png",
   "format": "RGBA8888",
   "size": { "w": 128, "h": 32 },
   "scale": "1",

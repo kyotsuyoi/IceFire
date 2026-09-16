@@ -21,6 +21,7 @@ namespace IceFire
         private Screen _screen;
         private PlayerSprite _player;
         private readonly List<Spell> _spells = [];
+        private readonly List<SpellEffect> _spellEffects = [];
         private StartGameRequest _currentGameRequest;
         private bool _gameStarted;
 
@@ -90,16 +91,29 @@ namespace IceFire
                 var spellCollisionAreas = GetSpellCollisionAreas();
                 _player?.Update(gameTime, command, _tilemap.Collision, spellCollisionAreas);
                 foreach (var spell in _spells)
-                    spell.TryConsumeWave(_player.CollisionBounds);
+                {
+                    if (spell.TryConsumeWave(_player.CollisionBounds))
+                        _spellEffects.Add(new SpellEffect(Content, new Vector2(_player.CollisionBounds.X, _player.CollisionBounds.Y)));
+                }
 
                 for (var index = 0; index < _spells.Count; index++)
                 {
                     var spell = _spells[index];
                     var otherSpells = _spells.Where(otherSpell => otherSpell != spell).ToList();
                     spell.Update(gameTime, _tilemap.Collision, otherSpells);
+                    foreach (var impact in spell.ConsumeDestructibleImpacts())
+                    {
+                        _spellEffects.Add(new SpellEffect(
+                            Content,
+                            impact.Position,
+                            () => _tilemap.Collision.CompleteDestruction(impact.Object)));
+                    }
                 }
 
                 _spells.RemoveAll(spell => spell.IsFinished);
+                foreach (var effect in _spellEffects)
+                    effect.Update(gameTime);
+                _spellEffects.RemoveAll(effect => effect.IsFinished);
             }
 
             base.Update(gameTime);
@@ -122,6 +136,7 @@ namespace IceFire
             _gameRenderTarget = new RenderTarget2D(GraphicsDevice, _tilemap.Size.X, _tilemap.Size.Y);
             _pauseMenu = new PauseMenu(Content.Load<SpriteFont>("Fonts/MenuFont"), GraphicsDevice);
             _spells.Clear();
+            _spellEffects.Clear();
             _screen = new Screen(GraphicsDevice, _graphics, _gameRenderTarget);
 
             var playerSpawn = _tilemap.GetObjectByName("PlayerSpawn1");
@@ -198,6 +213,9 @@ namespace IceFire
 
             foreach (var spell in _spells.Where(spell => spell.DrawLayerY >= playerDrawY))
                 spell.Draw(_spriteBatch);
+
+            foreach (var effect in _spellEffects)
+                effect.Draw(_spriteBatch);
 
             _pauseMenu.Draw(_spriteBatch, _tilemap.Size);
             _spriteBatch.End();
