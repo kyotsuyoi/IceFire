@@ -89,3 +89,18 @@
 /processor:TextureProcessor
 /build:Sprites/SpriteC0206.png
 
+#begin FX/Spell01.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:FX/Spell01.png
+
+#begin FX/Spell02.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:FX/Spell02.png
+
+#begin FX/Spell03.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:FX/Spell03.png
+

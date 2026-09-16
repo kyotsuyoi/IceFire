@@ -5,24 +5,56 @@ using System.Collections.Generic;
 
 namespace IceFire.Classes
 {
+    public sealed class CollisionObject
+    {
+        public CollisionObject(Rectangle bounds, bool destructible, uint globalTileId)
+        {
+            Bounds = bounds;
+            Destructible = destructible;
+            GlobalTileId = globalTileId;
+        }
+
+        public Rectangle Bounds { get; }
+        public bool Destructible { get; }
+        public uint GlobalTileId { get; }
+        public bool IsDestroyed { get; private set; }
+
+        public void Destroy()
+        {
+            IsDestroyed = true;
+        }
+    }
+
     public sealed class CollisionMap
     {
-        private readonly IReadOnlyList<Rectangle> _blockedAreas;
+        private readonly IReadOnlyList<CollisionObject> _collisionObjects;
         private readonly Rectangle _mapBounds;
 
-        public CollisionMap(IEnumerable<Rectangle> blockedAreas, Rectangle mapBounds)
+        public CollisionMap(IEnumerable<CollisionObject> collisionObjects, Rectangle mapBounds)
         {
-            _blockedAreas = blockedAreas is IReadOnlyList<Rectangle> readOnlyAreas
-                ? readOnlyAreas
-                : new List<Rectangle>(blockedAreas ?? throw new ArgumentNullException(nameof(blockedAreas)));
+            _collisionObjects = collisionObjects is IReadOnlyList<CollisionObject> readOnlyObjects
+                ? readOnlyObjects
+                : new List<CollisionObject>(collisionObjects ?? throw new ArgumentNullException(nameof(collisionObjects)));
             _mapBounds = mapBounds;
         }
 
-        public IReadOnlyList<Rectangle> BlockedAreas => _blockedAreas;
+        public IReadOnlyList<Rectangle> BlockedAreas
+        {
+            get
+            {
+                var areas = new List<Rectangle>();
+                foreach (var collisionObject in _collisionObjects)
+                {
+                    if (!collisionObject.IsDestroyed) areas.Add(collisionObject.Bounds);
+                }
+
+                return areas;
+            }
+        }
 
         public void DrawDebug(SpriteBatch spriteBatch, Texture2D pixel)
         {
-            foreach (var area in _blockedAreas)
+            foreach (var area in BlockedAreas)
             {
                 spriteBatch.Draw(pixel, area, new Color(220, 45, 45) * 0.35f);
             }
@@ -42,9 +74,43 @@ namespace IceFire.Classes
                 bounds.Inflate(-tolerance, -tolerance);
             }
 
-            foreach (var blockedArea in _blockedAreas)
+            foreach (var collisionObject in _collisionObjects)
             {
-                if (blockedArea.Intersects(bounds)) return false;
+                if (!collisionObject.IsDestroyed && collisionObject.Bounds.Intersects(bounds)) return false;
+            }
+
+            return true;
+        }
+
+        public bool CanMove(Rectangle currentBounds, Rectangle nextBounds, int tolerance, IReadOnlyList<Rectangle> additionalAreas)
+        {
+            if (!CanOccupy(nextBounds, tolerance)) return false;
+
+            foreach (var additionalArea in additionalAreas)
+            {
+                if (!additionalArea.Intersects(nextBounds)) continue;
+                if (!additionalArea.Intersects(currentBounds)) return false;
+
+                var currentOverlap = GetIntersectionArea(currentBounds, additionalArea);
+                var nextOverlap = GetIntersectionArea(nextBounds, additionalArea);
+                if (nextOverlap >= currentOverlap) return false;
+            }
+
+            return true;
+        }
+
+        public bool CanOccupy(Rectangle bounds, IReadOnlyList<Rectangle> additionalAreas)
+        {
+            return CanOccupy(bounds, 0, additionalAreas);
+        }
+
+        public bool CanOccupy(Rectangle bounds, int tolerance, IReadOnlyList<Rectangle> additionalAreas)
+        {
+            if (!CanOccupy(bounds, tolerance)) return false;
+
+            foreach (var additionalArea in additionalAreas)
+            {
+                if (additionalArea.Intersects(bounds)) return false;
             }
 
             return true;
@@ -57,8 +123,10 @@ namespace IceFire.Classes
             var smallestOverlap = int.MaxValue;
             var selectedArea = default(Rectangle);
 
-            foreach (var blockedArea in _blockedAreas)
+            foreach (var collisionObject in _collisionObjects)
             {
+                if (collisionObject.IsDestroyed) continue;
+                var blockedArea = collisionObject.Bounds;
                 if (!blockedArea.Intersects(attemptedBounds)) continue;
 
                 var overlap = horizontalMovement
@@ -81,9 +149,42 @@ namespace IceFire.Classes
             return true;
         }
 
+        public bool TryDestroyDestructible(Rectangle hitBounds)
+        {
+            foreach (var collisionObject in _collisionObjects)
+            {
+                if (!collisionObject.IsDestroyed
+                    && collisionObject.Destructible
+                    && collisionObject.Bounds.Intersects(hitBounds))
+                {
+                    collisionObject.Destroy();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool IsDestroyed(Rectangle bounds, uint globalTileId)
+        {
+            foreach (var collisionObject in _collisionObjects)
+            {
+                if (collisionObject.GlobalTileId == globalTileId && collisionObject.Bounds == bounds)
+                    return collisionObject.IsDestroyed;
+            }
+
+            return false;
+        }
+
         private static int GetOverlap(int firstStart, int firstEnd, int secondStart, int secondEnd)
         {
             return Math.Max(0, Math.Min(firstEnd, secondEnd) - Math.Max(firstStart, secondStart));
+        }
+
+        private static int GetIntersectionArea(Rectangle first, Rectangle second)
+        {
+            return GetOverlap(first.Left, first.Right, second.Left, second.Right)
+                * GetOverlap(first.Top, first.Bottom, second.Top, second.Bottom);
         }
     }
 }

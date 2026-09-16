@@ -12,6 +12,7 @@ namespace IceFire.Classes
         Left,
         Right,
         Confirm,
+        Spell,
         Start,
         Back
     }
@@ -45,6 +46,16 @@ namespace IceFire.Classes
                 return InputCommand.Start;
             }
 
+            if (IsPressed(keyboardState, Keys.G))
+            {
+                return InputCommand.Spell;
+            }
+
+            if (IsPressed(gamePadState, Buttons.A))
+            {
+                return InputCommand.Confirm;
+            }
+
             if (keyboardState.IsKeyDown(Keys.Up) || gamePadState.IsButtonDown(Buttons.DPadUp) || IsThumbstickHeld(gamePadState, 1))
             {
                 return InputCommand.Up;
@@ -65,7 +76,7 @@ namespace IceFire.Classes
                 return InputCommand.Right;
             }
 
-            if (IsPressed(keyboardState, Keys.Enter) || IsPressed(gamePadState, Buttons.A))
+            if (IsPressed(keyboardState, Keys.Enter))
             {
                 return InputCommand.Confirm;
             }

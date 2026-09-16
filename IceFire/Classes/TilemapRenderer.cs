@@ -32,7 +32,7 @@ namespace IceFire.Classes
             ).ReadMap();
 
             _tilesets = ((IEnumerable<dynamic>)_map.Tilesets).OrderBy(tileset => (uint)tileset.FirstGID.Value).ToList();
-            Collision = new CollisionMap(ReadBlockedAreas(), new Rectangle(Point.Zero, Size));
+            Collision = new CollisionMap(ReadCollisionObjects(), new Rectangle(Point.Zero, Size));
         }
 
         public void DrawCollisionDebug(SpriteBatch spriteBatch, Texture2D pixel)
@@ -85,11 +85,13 @@ namespace IceFire.Classes
                 //Ignore the players spawn point object with ID 0 and ID 1 in Tiled
                 if (tileObject.GID-1 == 0 || tileObject.GID-1 == 1) continue;
 
-                DrawTile(spriteBatch, tileObject.GID, tileObject.FlippingFlags, new Vector2(tileObject.X, tileObject.Y - tileObject.Height));
+                var bounds = new Rectangle((int)tileObject.X, (int)tileObject.Y - (int)tileObject.Height, (int)tileObject.Width, (int)tileObject.Height);
+                if (!Collision.IsDestroyed(bounds, tileObject.GID))
+                    DrawTile(spriteBatch, tileObject.GID, tileObject.FlippingFlags, new Vector2(tileObject.X, tileObject.Y - tileObject.Height));
             }
         }
 
-        private IEnumerable<Rectangle> ReadBlockedAreas()
+        private IEnumerable<CollisionObject> ReadCollisionObjects()
         {
             foreach (var layer in ((IEnumerable<BaseLayer>)_map.Layers).OfType<ObjectLayer>())
             {
@@ -97,11 +99,12 @@ namespace IceFire.Classes
                 {
                     if (!GetBoolProperty(tileObject, "block", false)) continue;
 
-                    yield return new Rectangle(
+                    var bounds = new Rectangle(
                         (int)tileObject.X,
                         (int)tileObject.Y - (int)tileObject.Height,
                         (int)tileObject.Width,
                         (int)tileObject.Height);
+                    yield return new CollisionObject(bounds, GetBoolProperty(tileObject, "destructible", false), tileObject.GID);
                 }
             }
         }

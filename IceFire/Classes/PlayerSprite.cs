@@ -106,7 +106,7 @@ namespace IceFire.Classes
             _current.Reset();
         }
 
-        public void Update(GameTime gameTime, InputCommand command, CollisionMap collision)
+        public void Update(GameTime gameTime, InputCommand command, CollisionMap collision, IReadOnlyList<Rectangle> additionalAreas = null)
         {
             var movement = Vector2.Zero;
 
@@ -157,17 +157,17 @@ namespace IceFire.Classes
 
             var speedLevel = Math.Clamp(SpeedLevel, 1, 10);
             var speedMultiplier = 1f + (speedLevel - 1) * 0.15f;
-            Move(movement * BaseSpeed * speedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds, collision);
+            Move(movement * BaseSpeed * speedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds, collision, additionalAreas);
 
             _current?.Update(gameTime, IsMovementAnimation() ? speedMultiplier : 1f);
         }
 
-        private void Move(Vector2 movement, CollisionMap collision)
+        private void Move(Vector2 movement, CollisionMap collision, IReadOnlyList<Rectangle> additionalAreas)
         {
             if (movement == Vector2.Zero) return;
 
             var nextPosition = Position + movement;
-            if (collision == null || collision.CanOccupy(GetBounds(nextPosition)))
+            if (collision == null || CanMoveTo(nextPosition, collision, 0, additionalAreas))
             {
                 Position = nextPosition;
                 return;
@@ -184,14 +184,14 @@ namespace IceFire.Classes
             {
                 for (var distance = 1; distance <= GetAutoAlignDistance(horizontalMovement: true); distance++)
                 {
-                    if (TryMoveTo(new Vector2(nextPosition.X, Position.Y + direction * distance), collision, AutoAlignTolerance)) return;
+                    if (TryMoveTo(new Vector2(nextPosition.X, Position.Y + direction * distance), collision, AutoAlignTolerance, additionalAreas)) return;
                 }
             }
             else
             {
                 for (var distance = 1; distance <= GetAutoAlignDistance(horizontalMovement: false); distance++)
                 {
-                    if (TryMoveTo(new Vector2(Position.X + direction * distance, nextPosition.Y), collision, AutoAlignTolerance)) return;
+                    if (TryMoveTo(new Vector2(Position.X + direction * distance, nextPosition.Y), collision, AutoAlignTolerance, additionalAreas)) return;
                 }
             }
         }
@@ -203,12 +203,19 @@ namespace IceFire.Classes
             return (int)MathF.Ceiling(perpendicularSize * percentage);
         }
 
-        private bool TryMoveTo(Vector2 position, CollisionMap collision, int tolerance)
+        private bool TryMoveTo(Vector2 position, CollisionMap collision, int tolerance, IReadOnlyList<Rectangle> additionalAreas)
         {
-            if (!collision.CanOccupy(GetBounds(position), tolerance)) return false;
+            if (!CanMoveTo(position, collision, tolerance, additionalAreas)) return false;
 
             Position = position;
             return true;
+        }
+
+        private bool CanMoveTo(Vector2 position, CollisionMap collision, int tolerance, IReadOnlyList<Rectangle> additionalAreas)
+        {
+            var currentBounds = GetBounds(Position);
+            var nextBounds = GetBounds(position);
+            return collision.CanMove(currentBounds, nextBounds, tolerance, additionalAreas ?? []);
         }
 
         private Rectangle GetBounds(Vector2 position)

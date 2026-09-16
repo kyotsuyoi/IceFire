@@ -45,6 +45,8 @@ namespace IceFire.Classes
         public bool ShowObjectCollisions { get; private set; }
         public bool ShowPlayerCollisions { get; private set; }
         public int CharacterSpeedLevel { get; private set; } = 1;
+        public int SpellLimit { get; private set; } = 1;
+        public int DetonationPower { get; private set; } = 1;
 
         public PauseMenuResult Update(InputCommand command)
         {
@@ -147,12 +149,14 @@ namespace IceFire.Classes
         private PauseMenuResult UpdateDebug(InputCommand command)
         {
             if (command is InputCommand.Up or InputCommand.Down)
-                _selectedOption = MoveSelection(_selectedOption, 3, command == InputCommand.Down);
+                _selectedOption = MoveSelection(_selectedOption, 5, command == InputCommand.Down);
             else if (command == InputCommand.Confirm)
             {
                 if (_selectedOption == 0) ShowObjectCollisions = !ShowObjectCollisions;
                 else if (_selectedOption == 1) ShowPlayerCollisions = !ShowPlayerCollisions;
-                else CharacterSpeedLevel = CharacterSpeedLevel == 10 ? 1 : CharacterSpeedLevel + 1;
+                else if (_selectedOption == 2) CharacterSpeedLevel = CharacterSpeedLevel == 10 ? 1 : CharacterSpeedLevel + 1;
+                else if (_selectedOption == 3) SpellLimit = SpellLimit == 10 ? 1 : SpellLimit + 1;
+                else DetonationPower = DetonationPower == 10 ? 1 : DetonationPower + 1;
             }
 
             return new PauseMenuResult(PauseMenuAction.None);
@@ -182,7 +186,14 @@ namespace IceFire.Classes
                 MenuPage.Main => MainOptions,
                 MenuPage.Options => OptionMenus,
                 MenuPage.Graphics => [.. Resolutions.Select(resolution => $"Resolution {resolution.X} x {resolution.Y}"), "Fullscreen"],
-                MenuPage.Debug => [$"Objects: {(ShowObjectCollisions ? "ON" : "OFF")}", $"Players: {(ShowPlayerCollisions ? "ON" : "OFF")}", $"Char Speed = {CharacterSpeedLevel}"],
+                MenuPage.Debug =>
+                [
+                    $"Objects: {(ShowObjectCollisions ? "ON" : "OFF")}",
+                    $"Players: {(ShowPlayerCollisions ? "ON" : "OFF")}",
+                    $"Char Speed = {CharacterSpeedLevel}",
+                    $"Spell Limit = {SpellLimit}",
+                    $"Detonation Power = {DetonationPower}"
+                ],
                 _ => []
             };
         }

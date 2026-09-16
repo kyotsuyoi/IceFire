@@ -2,7 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace IceFire
 {
@@ -18,6 +20,7 @@ namespace IceFire
         private StartMenu _startMenu;
         private Screen _screen;
         private PlayerSprite _player;
+        private readonly List<Spell> _spells = [];
         private StartGameRequest _currentGameRequest;
         private bool _gameStarted;
 
@@ -78,7 +81,25 @@ namespace IceFire
             if (!_pauseMenu.IsOpen)
             {
                 _player.SpeedLevel = _pauseMenu.CharacterSpeedLevel;
-                _player?.Update(gameTime, command, _tilemap.Collision);
+
+                if ((command is InputCommand.Confirm or InputCommand.Spell) && CanCastSpell())
+                {
+                    CreateSpell(_pauseMenu.DetonationPower);
+                }
+
+                var spellCollisionAreas = GetSpellCollisionAreas();
+                _player?.Update(gameTime, command, _tilemap.Collision, spellCollisionAreas);
+                foreach (var spell in _spells)
+                    spell.TryConsumeWave(_player.CollisionBounds);
+
+                for (var index = 0; index < _spells.Count; index++)
+                {
+                    var spell = _spells[index];
+                    var otherSpells = _spells.Where(otherSpell => otherSpell != spell).ToList();
+                    spell.Update(gameTime, _tilemap.Collision, otherSpells);
+                }
+
+                _spells.RemoveAll(spell => spell.IsFinished);
             }
 
             base.Update(gameTime);
@@ -100,6 +121,7 @@ namespace IceFire
                 "OBJ" + suffix);
             _gameRenderTarget = new RenderTarget2D(GraphicsDevice, _tilemap.Size.X, _tilemap.Size.Y);
             _pauseMenu = new PauseMenu(Content.Load<SpriteFont>("Fonts/MenuFont"), GraphicsDevice);
+            _spells.Clear();
             _screen = new Screen(GraphicsDevice, _graphics, _gameRenderTarget);
 
             var playerSpawn = _tilemap.GetObjectByName("PlayerSpawn1");
@@ -109,6 +131,40 @@ namespace IceFire
             _player.Load(request.CharacterPrefix + "01");
             _player.Position = new Vector2(playerSpawnPoint.X, playerSpawnPoint.Y - 48);
             _gameStarted = true;
+        }
+
+        private bool CanCastSpell()
+        {
+            return _spells.Count(spell => !spell.IsFinished) < _pauseMenu.SpellLimit;
+        }
+
+        private void CreateSpell(int detonationPower)
+        {
+            const int tileSize = 32;
+            var playerBounds = _player.CollisionBounds;
+            var spellPosition = new Vector2(
+                MathF.Floor(playerBounds.Center.X / tileSize) * tileSize,
+                MathF.Floor(playerBounds.Center.Y / tileSize) * tileSize);
+            var spellBounds = new Rectangle((int)spellPosition.X, (int)spellPosition.Y, 32, 32);
+            if (!_tilemap.Collision.CanOccupy(spellBounds, GetSpellPlacementAreas())) return;
+
+            _spells.Add(new Spell(Content, spellPosition, detonationPower));
+        }
+
+        private List<Rectangle> GetSpellCollisionAreas(Spell ignoredSpell = null)
+        {
+            return _spells
+                .Where(spell => spell != ignoredSpell)
+                .SelectMany(spell => spell.PlayerBlockingBounds)
+                .ToList();
+        }
+
+        private List<Rectangle> GetSpellPlacementAreas()
+        {
+            return _spells
+                .Where(spell => !spell.IsFinished)
+                .Select(spell => spell.Bounds)
+                .ToList();
         }
 
         protected override void Draw(GameTime gameTime)
@@ -131,9 +187,18 @@ namespace IceFire
             _tilemap.Draw(_spriteBatch);
             if (_pauseMenu?.ShowObjectCollisions == true)
                 _tilemap.DrawCollisionDebug(_spriteBatch, _debugPixel);
+
+            var playerDrawY = _player?.CollisionBounds.Bottom ?? int.MaxValue;
+            foreach (var spell in _spells.Where(spell => spell.DrawLayerY < playerDrawY))
+                spell.Draw(_spriteBatch);
+
             _player?.Draw(_spriteBatch);
             if (_pauseMenu?.ShowPlayerCollisions == true)
                 _player?.DrawCollisionDebug(_spriteBatch, _debugPixel);
+
+            foreach (var spell in _spells.Where(spell => spell.DrawLayerY >= playerDrawY))
+                spell.Draw(_spriteBatch);
+
             _pauseMenu.Draw(_spriteBatch, _tilemap.Size);
             _spriteBatch.End();
 
