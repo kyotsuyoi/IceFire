@@ -64,11 +64,11 @@
 - ✅ - Realizar o SpawnPoint dos players no mapa e controla-los na tela.  
 - ✅ - Criar classes de colisão com objetos para impedir que a personagem atravesse paredes ou saia da tela.
 - ![Conceito atual](IceFire/Content/Tiles/Tiled/CollisionMap.png)
-- ⬜ - Criar sprites de objetos coletáveis ou destrutíveis.
-- ⬜ - Criar interação da personagem com objetos coletáveis ou destrutíveis.  
+- 🔄 - (20%) Criar sprites de objetos coletáveis ou destrutíveis.
+- 🔄 - (35%) Criar interação da personagem com objetos coletáveis ou destrutíveis.  
 - ⬜ - Criar Sprites para os inimigos se movimentarem na tela.
 - ⬜ - Criar classe ou método para primeiro spawn de inimigos no mapa a partir da posição inicial definida no JSON do Tiled.  
-- ⬜ - Criar sprites de efeitos visuais para danos em jogadores, inimigos, e poderes. 
+- 🔄 - (20%) Criar sprites de efeitos visuais para danos em jogadores, inimigos, e poderes. 
 - ⬜ - Criar interação da personagem com inimigos (monstro recebe ataque).  
 - ⬜ - Criar interação dos inimigos com as personagens (personagem recebe ataque), os inimigos precisam detectar a presença do jogador e usar seus golpes disponíveis.  
 - 🔄 - (30%) Criar menu inicial com Start Game o Options onde Start Game vai para a primeira tela disponível e Options será para configurar mapeamento de controles, áudio e vídeo.
